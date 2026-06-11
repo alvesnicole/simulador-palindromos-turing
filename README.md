@@ -12,13 +12,13 @@ Este projeto consiste em um simulador interativo baseado na Web para uma Máquin
 
 ## Arquitetura do Sistema
 
-O software foi desenvolvido seguindo o princípio de separação de responsabilidades, dividido em três componentes principais na pasta `src/`:
+O software foi desenvolvido seguindo o princípio de separação de responsabilidades, dividido em três componentes principais na pasta src/:
 
 * TuringMachineLogic.js: Motor matemático que processa as funções de transição da Máquina de Turing, valida as cadeias binárias e exporta o histórico completo de estados e posições de cabeçote.
 * App.js: Componente estrutural em React que gerencia os estados da interface, controla os intervalos de animação (Play/Pause/Reset) e renderiza as tabelas de dados dinâmicos.
 * App.css: Camada de apresentação minimalista, configurada com paleta de cores sóbria (estilo Shadcn UI) e estados visuais focados em usabilidade técnica.
 
----
+
 
 ## Estrutura da Matriz de Transição
 
