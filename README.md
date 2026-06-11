@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# Simulador de Máquina de Turing de Duas Fitas
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto consiste em um simulador interativo baseado na Web para uma Máquina de Turing (MT) com duas fitas, projetado especificamente para demonstrar o reconhecimento da linguagem de palíndromos binários em tempo linear. A aplicação combina um motor de execução formal com um painel de visualização em tempo real e análise empírica de complexidade assintótica.
 
-## Available Scripts
+## Objetivos do Projeto
 
-In the project directory, you can run:
+* Demonstração Prática: Visualizar o comportamento dos cabeçotes de leitura e escrita e as mudanças de estados passo a passo.
+* Validação Teórica: Comprovar empiricamente como a introdução de uma fita de memória auxiliar reduz o limite superior assintótico de tempo de O(n²) (em modelo de fita única) para O(n).
+* Interface de Alta Fidelidade: Fornecer um ambiente de controle desacoplado, minimalista e focado no fluxo lógico do autômato.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Arquitetura do Sistema
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+O software foi desenvolvido seguindo o princípio de separação de responsabilidades, dividido em três componentes principais na pasta `src/`:
 
-### `npm test`
+* `TuringMachineLogic.js`: Motor matemático que processa as funções de transição da Máquina de Turing, valida as cadeias binárias e exporta o histórico completo de estados e posições de cabeçote.
+* `App.js`: Componente estrutural em React que gerencia os estados da interface, controla os intervalos de animação (Play/Pause/Reset) e renderiza as tabelas de dados dinâmicos.
+* `App.css`: Camada de apresentação minimalista, configurada com paleta de cores sóbria (estilo Shadcn UI) e estados visuais focados em usabilidade técnica.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Estrutura da Matriz de Transição
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+O autômato foi modelado como uma função de transição total para o alfabeto de fita $\Sigma = \{0, 1, \_\}$, operando através dos seguintes estados principais:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Estado Inicial | Leitura (Fita 1, Fita 2) | Próximo Estado | Escrita (Fita 1, Fita 2) | Movimento (Fita 1, Fita 2) | Função do Estado |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **q_copia** | (0, \_) ou (1, \_) | q_copia | (0, 0) ou (1, 1) | (Direita, Direita) | Duplica a cadeia de entrada na fita auxiliar. |
+| **q_volta** | (0, \_) ou (1, \_) | q_volta | (0, \_) ou (1, \_) | (Esquerda, Sem Movimento) | Reposiciona o cabeçote 1 no início da palavra. |
+| **q_checa** | (0, 0) ou (1, 1) | q_checa | (0, 0) ou (1, 1) | (Direita, Esquerda) | Compara as fitas em direções opostas. |
+| **q_checa** | Diferentes | q_rejeita | - | (Sem Movimento, Sem Movimento) | Interrompe a execução e aponta erro de assimetria. |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Funcionalidades Implementadas
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* Restrição de Entrada: O campo de captura realiza o tratamento de strings em tempo real via Expressões Regulares, permitindo apenas caracteres pertencentes ao alfabeto binário.
+* Controle de Fluxo Fino: Botões de execução automática por amostragem periódica (300ms) ou execução discreta passo a passo para auditoria manual.
+* Feedback Visual de Estados: Painel dinâmico que altera sua tonalidade de acordo com o encerramento do processamento (`q_aceita` em verde sutil; `q_rejeita` em vermelho sutil).
+* Geração de Gráfico Empírico: Acoplamento da biblioteca Recharts para testar o comportamento do modelo com palíndromos crescentes ($10 \le n \le 150$), plotando a progressão estritamente linear da máquina.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Instalação e Execução
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Pré-requisitos
+Antes de iniciar, certifique-se de ter o Node.js e o gerenciador de pacotes npm instalados em sua máquina.
 
-## Learn More
+### Passos para Configuração
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Clone o repositório para o seu ambiente de desenvolvimento local:
+```bash
+git clone [https://github.com/](https://github.com/)[Seu Usuário]/[Nome do Repositório].git
